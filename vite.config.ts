@@ -4,7 +4,7 @@ import WindiCSS from "vite-plugin-windicss";
 import ViteFonts from "vite-plugin-fonts";
 import ViteIcons, { ViteIconsResolver } from "vite-plugin-icons";
 import ViteComponents from "vite-plugin-components";
-import vueSvgPlugin from "vite-plugin-vue-svg";
+const vueSvgPlugin = require("vite-plugin-vue-svg");
 
 export default defineConfig({
   plugins: [
@@ -31,4 +31,8 @@ export default defineConfig({
       },
     }),
   ],
+
+  build: {
+    chunkSizeWarningLimit: 600,
+  },
 });

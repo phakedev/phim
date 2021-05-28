@@ -1,10 +1,9 @@
 {
-  "name": "@phake/movie-search-engine",
+  "name": "movie-search-engine",
   "version": "0.0.1",
   "description": "A search engine based for movies, anime,...",
   "author": "senpp<https://github.com/senpp",
   "license": "MIT",
-  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
