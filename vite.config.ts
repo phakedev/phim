@@ -4,12 +4,15 @@ import WindiCSS from "vite-plugin-windicss";
 import ViteFonts from "vite-plugin-fonts";
 import ViteIcons, { ViteIconsResolver } from "vite-plugin-icons";
 import ViteComponents from "vite-plugin-components";
-import SvgLoader from "vite-svg-loader";
+import vueSvgPlugin from "vite-plugin-vue-svg";
 
 export default defineConfig({
   plugins: [
     vue(),
-    SvgLoader(),
+    vueSvgPlugin({
+      defaultExport: "url",
+      svgoConfig: {},
+    }),
     WindiCSS(),
     ViteComponents({
       customComponentResolvers: ViteIconsResolver(),
@@ -28,4 +31,14 @@ export default defineConfig({
       },
     }),
   ],
+
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          videoJs: ["video.js"],
+        },
+      },
+    },
+  },
 });

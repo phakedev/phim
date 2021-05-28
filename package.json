@@ -32,8 +32,8 @@
     "vite-plugin-components": "^0.10.2",
     "vite-plugin-fonts": "^0.2.2",
     "vite-plugin-icons": "^0.5.1",
+    "vite-plugin-vue-svg": "^0.1.0",
     "vite-plugin-windicss": "^0.16.5",
-    "vite-svg-loader": "^2.0.2",
     "vue-tsc": "^0.0.24",
     "windicss": "^3.0.12"
   }

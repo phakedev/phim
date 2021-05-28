@@ -24,8 +24,8 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref } from "vue";
 import { useDark, useToggle } from "@vueuse/core";
-import IconMoon from "./../assets/svg/icon-moon.svg";
-import IconSun from "./../assets/svg/icon-sun.svg";
+import IconMoon from "./../assets/svg/icon-moon.svg?component";
+import IconSun from "./../assets/svg/icon-sun.svg?component";
 
 export default defineComponent({
   components: { IconMoon, IconSun },
