@@ -31,14 +31,4 @@ export default defineConfig({
       },
     }),
   ],
-
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          videoJs: ["video.js"],
-        },
-      },
-    },
-  },
 });
