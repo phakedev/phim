@@ -10,13 +10,15 @@
       overflow-hidden
       shadow-xl
     "
-  ></video>
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, watch } from "vue";
-import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
-import "video.js/dist/video-js.css";
+import { defineComponent, onMounted, watch } from "vue"
+import videojs, { VideoJsPlayerOptions } from "video.js"
+import "videojs-seek-buttons"
+import "video.js/dist/video-js.css"
+import "videojs-seek-buttons/dist/videojs-seek-buttons.css"
 
 export default defineComponent({
   props: {
@@ -26,38 +28,44 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    let player: VideoJsPlayer | null = null;
+    let player: any | null = null
     const options: VideoJsPlayerOptions = {
       autoplay: true,
       fluid: true,
       controls: true,
       playbackRates: [0.5, 1, 1.5, 2, 4],
-    };
+    }
 
     onMounted(() => {
-      player = videojs("player", options);
-    });
+      if (videojs.getAllPlayers().length === 0) {
+        player = videojs("player", options)
+        player.seekButtons({
+          forward: 15,
+          back: 15,
+        })
+      }
+    })
 
     watch(
       () => props.data,
       (val) => {
         if (!val || !player) {
-          return;
+          return
         }
         player.src({
           type: "application/x-mpegURL",
           src: val.url,
-        });
-        player.play();
-        emit("on-play");
-        const $ele = document.querySelector("#current-video");
+        })
+        player.play()
+        emit("on-play")
+        const $ele = document.querySelector("#current-video")
         if ($ele) {
-          const y = $ele.getBoundingClientRect().top + window.pageYOffset - 60;
-          window.scrollTo({ top: y, behavior: "smooth" });
+          const y = $ele.getBoundingClientRect().top + window.pageYOffset - 60
+          window.scrollTo({ top: y, behavior: "smooth" })
         }
       }
-    );
-    return {};
+    )
+    return {}
   },
-});
+})
 </script>
