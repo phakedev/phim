@@ -5,4 +5,7 @@ import MainLayout from "./layouts/default.vue"
 import { MotionPlugin } from "@vueuse/motion"
 import router from "./router"
 
-createApp(MainLayout).use(MotionPlugin).use(router).mount("#app")
+createApp(MainLayout)
+  .use(MotionPlugin)
+  .use(router)
+  .mount("#app")

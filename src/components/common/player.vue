@@ -17,7 +17,6 @@
 import { defineComponent, onMounted, watch } from "vue"
 import videojs, { VideoJsPlayerOptions } from "video.js"
 import "videojs-seek-buttons"
-import "videojs-playlist"
 import "video.js/dist/video-js.css"
 import "videojs-seek-buttons/dist/videojs-seek-buttons.css"
 

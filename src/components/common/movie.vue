@@ -76,7 +76,10 @@ export default defineComponent({
       default: null
     }
   },
-  setup() {}
+  emits: ["on-play"],
+  setup() {
+    return {}
+  }
 })
 </script>
 
