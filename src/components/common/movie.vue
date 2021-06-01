@@ -1,5 +1,16 @@
 <template>
-  <div v-if="data" class="relative">
+  <div
+    v-if="data"
+    class="
+      relative 
+      transition
+      hover:transform
+      hover:transition
+      hover:scale-105
+      cursor-pointer
+    "
+    @click="$emit('on-play', data)"
+  >
     <div
       class="
         relative
@@ -33,48 +44,6 @@
         :src="data.thumbnail"
         :alt="data.title"
       />
-      <div
-        v-if="data.url"
-        class="
-          absolute
-          top-0
-          left-0
-          bg-gray-900 bg-opacity-50
-          z-10
-          h-full
-          w-full
-          movie__thumbnail-overlay
-        "
-      >
-        <span
-          class="
-            absolute
-            transform
-            -translate-y-1/2
-            top-1/2
-            left-1/2
-            -translate-x-1/2
-            block
-          "
-          @click="$emit('on-play', data)"
-        >
-          <i-zmdi-play-circle
-            title="Watch trailer"
-            class="
-              text-white
-              bg-transparent
-              opacity-80
-              cursor-pointer
-              hover:opacity-100
-              hover:scale-110
-              hover:transition
-              transition
-              text-5xl
-              fill-current
-            "
-          />
-        </span>
-      </div>
     </div>
 
     <h5
@@ -99,16 +68,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from "vue"
 export default defineComponent({
   props: {
     data: {
       type: Object,
-      default: null,
-    },
+      default: null
+    }
   },
-  setup() {},
-});
+  setup() {}
+})
 </script>
 
 <style lang="postcss" scoped>

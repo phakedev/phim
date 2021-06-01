@@ -1,3 +1,4 @@
+import { resolve } from "path"
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import WindiCSS from "vite-plugin-windicss"
@@ -9,21 +10,27 @@ import ViteRadar from "vite-plugin-radar"
 const vueSvgPlugin = require("vite-plugin-vue-svg")
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "~": resolve(__dirname, "src")
+    }
+  },
+
   plugins: [
     vue(),
     Pages(),
     vueSvgPlugin({
       defaultExport: "url",
-      svgoConfig: {},
+      svgoConfig: {}
     }),
     ViteRadar({
       analytics: {
-        id: "G-RSNZK9JHE2",
-      },
+        id: "G-RSNZK9JHE2"
+      }
     }),
     WindiCSS(),
     ViteComponents({
-      customComponentResolvers: ViteIconsResolver(),
+      customComponentResolvers: ViteIconsResolver()
     }),
     ViteIcons(),
     ViteFonts({
@@ -32,15 +39,15 @@ export default defineConfig({
           {
             name: "JetBrains Mono",
             styles: "wght@300;400;500;600;700;800",
-            defer: true,
-          },
+            defer: true
+          }
         ],
-        display: "swap",
-      },
-    }),
+        display: "swap"
+      }
+    })
   ],
 
   build: {
-    chunkSizeWarningLimit: 600,
-  },
+    chunkSizeWarningLimit: 600
+  }
 })

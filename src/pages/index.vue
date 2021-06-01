@@ -7,28 +7,20 @@
       flex
       min-h-screen
       mx-auto
-      pt-8
-      md:pt-40
-      lg:pt-56
+      pt-8 
       px-4
       lg:px-0
+      duration-300
       transition-all
     "
+    :class="{
+      'md:pt-40 lg:pt-56': !state.hasResults
+    }"
   >
-    <div
-      v-motion
-      :initial="{
-        x: 100,
-        opacity: 0.25,
-      }"
-      :enter="{
-        x: 0,
-        opacity: 1,
-      }"
-      class="w-full"
-    >
-      <h1 class="text-2xl font-bold text-gray-600 uppercase tracking-widest">
-        Phim <span class="text-gray-400">Phake</span>
+    <div ref="appRef" class="w-full">
+      <h1 class="text-2xl font-bold text-gray-600 uppercase tracking-widest ">
+        Phim
+        <span class="text-gray-400 ">Phake</span>
       </h1>
       <p class="mt-2 text-gray-400 font-extralight text-xl">
         The free "<span class="font-normal">forever</span>" movie search engine
@@ -74,7 +66,12 @@
         </div>
 
         <elements-overlay :busy="busy.searching">
-          <div class="relative">
+          <div
+            class="relative"
+            :class="{
+              'w-1/2 mx-auto': state.hasResults
+            }"
+          >
             <input
               id="search-input"
               v-model="state.form.q"
@@ -85,6 +82,7 @@
                 'ring-red-600 ring-2 border-transparent':
                   state.errors &&
                   (state.form.q === null || state.form.q === ''),
+                'text-left': state.hasResults
               }"
               :disabled="busy.searching"
               @keyup.enter="search"
@@ -103,7 +101,7 @@
             >
               <div
                 :class="{
-                  'cursor-not-allowed pointer-events-none': busy.searching,
+                  'cursor-not-allowed pointer-events-none': busy.searching
                 }"
                 @click.prevent.stop="search"
               >
@@ -130,12 +128,27 @@
         </elements-overlay>
       </div>
 
-      <div v-show="state.selected" id="current-video" class="my-8">
-        <p class="text-center font-bold text-sm uppercase text-gray-500 mb-4">
-          ヽ(￣～￣)ノ Yolo!
+      <div v-show="state.selected" id="current-video" class="my-16">
+        <p
+          class="text-center font-medium rounded bg-gray-200 inline-block px-4 py-1 text-base  dark:bg-gray-800  dark:text-gray-400 mb-8"
+        >
+          🍺 Time to Chill!
         </p>
-        <h1 class="text-xl tracking-tight mb-4 font-semibold text-pink-700">
-          {{ state.selected ? "" : "" }}
+        <h1
+          v-if="state.selected"
+          class="text-2xl tracking-tight mb-4 font-semibold text-pink-700"
+        >
+          {{ state.selected.title ? state.selected.title : "" }}
+          <template v-if="state.selected.isMovieSeries">
+            - Tập
+            <span>
+              {{
+                state.selected.isMovieSeries
+                  ? state.selected.currentEpisode
+                  : ""
+              }}
+            </span>
+          </template>
         </h1>
         <common-player :data="state.selected" @on-play="show.playing = true" />
       </div>
@@ -180,12 +193,13 @@
 </template>
 
 <script lang="ts">
-import ElementsOverlay from "./../components/elements/overlay.vue";
-import CommonMovie from "./../components/common/movie.vue";
-import CommonPlayer from "./../components/common/player.vue";
-import { defineComponent, reactive, onMounted, watch, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useSearch } from "../modules/search";
+import ElementsOverlay from "~/components/elements/overlay.vue"
+import CommonMovie from "~/components/common/movie.vue"
+import CommonPlayer from "~/components/common/player.vue"
+import { defineComponent, reactive, onMounted, ref } from "vue"
+import { useRoute, useRouter } from "vue-router"
+import { useSearch } from "~/modules/search"
+import { useMotion } from "@vueuse/motion"
 
 export default defineComponent({
   components: { ElementsOverlay, CommonMovie, CommonPlayer },
@@ -194,94 +208,109 @@ export default defineComponent({
     const state = reactive<any>({
       form: {
         q: null,
-        smartSearch: true,
+        smartSearch: true
       },
       errors: null,
       results: null,
       selected: null,
-    });
+      hasResults: false
+    })
     const busy = reactive({
       searching: false,
-    });
-    const { getMovies } = useSearch();
-    const route = useRoute();
-    const router = useRouter();
+      loadingPlaylist: false
+    })
+    const appRef = ref()
+    const { getMovies } = useSearch()
+    const route = useRoute()
+    const router = useRouter()
     const show = ref({
-      playing: false,
-    });
+      playing: false
+    })
 
     /**
      * Set input value if route param q exists
      */
     onMounted(async () => {
-      if (route.query.smartSearch) {
-        state.form.smartSearch = route.query.smartSearch;
-      }
-
       if (route.query.q) {
-        state.form.q = route.query.q;
-        await search();
+        state.form.q = route.query.q
+        await search()
       }
-    });
+      initMotion()
+    })
 
-    watch(
-      () => state.form.smartSearch,
-      (val) => {
-        setQuery("smartSearch", val === true || val === "true" ? 1 : null);
-      }
-    );
+    const initMotion = () => {
+      useMotion(appRef, {
+        initial: {
+          x: 100,
+          opacity: 0
+        },
+        enter: {
+          x: 0,
+          opacity: 1,
+          transition: {
+            type: "spring",
+            stiffness: 350,
+            damping: 20,
+            delay: 50
+          }
+        }
+      })
+    }
 
     const setQuery = (key: string, val: any) => {
       const query = {
-        [key]: val,
-      };
+        [key]: val
+      }
       router.push({
         query: {
-          ...query,
-        },
-      });
-    };
+          ...query
+        }
+      })
+    }
 
     const search = async () => {
       try {
-        state.errors = null;
+        state.errors = null
         if (!state.form.q || state.form.q === "") {
-          setQuery("q", null);
-          throw new Error("Viết đại cái gì đó cũng được mà.");
+          setQuery("q", null)
+          state.hasResults = false
+          throw new Error("Viết đại cái gì đó cũng được mà.")
         }
 
-        setQuery("q", state.form.q);
+        setQuery("q", state.form.q)
 
-        busy.searching = true;
+        busy.searching = true
 
-        const response = await getMovies(state.form.q, state.form.smartSearch);
-        const responseBody = response.data;
+        const response = await getMovies(state.form.q, state.form.smartSearch)
+        const responseBody = response.data
         if (Array.isArray(responseBody) && responseBody.length === 0) {
-          throw new Error(
-            "Kiếm thử bộ khác đi người anh em, bộ này kiếm hoài không ra..."
-          );
+          state.hasResults = false
+          throw new Error("Kiếm thử bộ khác đi người anh em...")
         }
-        state.results = responseBody;
-        busy.searching = false;
+        state.results = responseBody
+        busy.searching = false
 
-        const $ele = document.querySelector("#results");
+        const $ele = document.querySelector("#results")
         if ($ele) {
-          const y = $ele.getBoundingClientRect().top + window.pageYOffset - 60;
-          window.scrollTo({ top: y, behavior: "smooth" });
+          const y = $ele.getBoundingClientRect().top + window.pageYOffset - 60
+          window.scrollTo({ top: y, behavior: "smooth" })
         }
+        state.hasResults = true
       } catch (err) {
-        busy.searching = false;
-        state.results = null;
-        state.errors = err.message;
+        busy.searching = false
+        state.results = null
+        state.errors = err.message
       }
-    };
+    }
 
     /**
      * Set selectec movie func
      */
-    const setSelectedMovie = (movie: string) => {
-      if (movie) state.selected = movie;
-    };
+    const setSelectedMovie = (movie: any) => {
+      if (movie) {
+        state.selected = movie
+      }
+    }
 
     return {
       state,
@@ -289,9 +318,10 @@ export default defineComponent({
       busy,
       search,
       setSelectedMovie,
-    };
-  },
-});
+      appRef
+    }
+  }
+})
 </script>
 
 <style scoped>
