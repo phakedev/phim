@@ -1,6 +1,6 @@
-import { defineConfig } from "windicss/helpers";
-import colors from "windicss/colors";
-import plugin from "windicss/plugin";
+import { defineConfig } from "windicss/helpers"
+import colors from "windicss/colors"
+import plugin from "windicss/plugin"
 
 export default defineConfig({
   darkMode: "class",
@@ -34,14 +34,19 @@ export default defineConfig({
     `,
   },
 
+  variants: {
+    scrollbar: ["rounded"],
+  },
+
   plugins: [
     require("windicss/plugin/line-clamp"),
+    require("@windicss/plugin-scrollbar"),
     plugin(({ addUtilities }) => {
       addUtilities({
         ".input-shadow": {
           "box-shadow": "0 2px 6px rgb(0 0 0 / 5%)",
         },
-      });
+      })
     }),
   ],
-});
+})

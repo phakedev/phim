@@ -13,8 +13,6 @@
         transform
         -translate-y-1/2
         items-center
-        bg-gray-200
-        border border-gray-300
         py-1
         px-2
         rounded
@@ -23,8 +21,12 @@
         transition
         z-10
         dark:transition
-        dark:bg-gray-700
       "
+      :class="{
+        'border border-gray-300 bg-gray-200 dark:bg-gray-700':
+          type === 'search',
+        'bg-opacity-80 bg-black justify-center': type === 'simple',
+      }"
     >
       <i-ri-loader-4-line
         class="
@@ -57,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from "vue"
 
 export default defineComponent({
   props: {
@@ -65,9 +67,13 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    type: {
+      type: String,
+      default: "search",
+    },
   },
   setup() {},
-});
+})
 </script>
 
 <style scoped>

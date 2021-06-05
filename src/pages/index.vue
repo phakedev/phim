@@ -7,20 +7,20 @@
       flex
       min-h-screen
       mx-auto
-      pt-8 
+      pt-8
       px-4
       lg:px-0
       duration-300
       transition-all
     "
     :class="{
-      'md:pt-40 lg:pt-56': !state.hasResults
+      'md:pt-40 lg:pt-56': !state.hasResults,
     }"
   >
     <div ref="appRef" class="w-full">
-      <h1 class="text-2xl font-bold text-gray-600 uppercase tracking-widest ">
+      <h1 class="text-2xl font-bold text-gray-600 uppercase tracking-widest">
         Phim
-        <span class="text-gray-400 ">Phake</span>
+        <span class="text-gray-400">Phake</span>
       </h1>
       <p class="mt-2 text-gray-400 font-extralight text-xl">
         The free "<span class="font-normal">forever</span>" movie search engine
@@ -69,7 +69,7 @@
           <div
             class="relative"
             :class="{
-              'w-1/2 mx-auto': state.hasResults
+              'w-1/2 mx-auto': state.hasResults,
             }"
           >
             <input
@@ -82,7 +82,7 @@
                 'ring-red-600 ring-2 border-transparent':
                   state.errors &&
                   (state.form.q === null || state.form.q === ''),
-                'text-left': state.hasResults
+                'text-left': state.hasResults,
               }"
               :disabled="busy.searching"
               @keyup.enter="search"
@@ -101,7 +101,7 @@
             >
               <div
                 :class="{
-                  'cursor-not-allowed pointer-events-none': busy.searching
+                  'cursor-not-allowed pointer-events-none': busy.searching,
                 }"
                 @click.prevent.stop="search"
               >
@@ -128,30 +128,91 @@
         </elements-overlay>
       </div>
 
-      <div v-show="state.selected" id="current-video" class="my-16">
-        <p
-          class="text-center font-medium rounded bg-gray-200 inline-block px-4 py-1 text-base  dark:bg-gray-800  dark:text-gray-400 mb-8"
-        >
-          🍺 Time to Chill!
-        </p>
-        <h1
-          v-if="state.selected"
-          class="text-2xl tracking-tight mb-4 font-semibold text-pink-700"
-        >
-          {{ state.selected.title ? state.selected.title : "" }}
-          <template v-if="state.selected.isMovieSeries">
-            - Tập
-            <span>
-              {{
-                state.selected.isMovieSeries
-                  ? state.selected.currentEpisode
-                  : ""
-              }}
+      <elements-overlay type="simple" :busy="busy.loadingPlayer">
+        <div v-show="state.selected" id="current-video" class="my-16">
+          <p
+            class="
+              text-center
+              font-medium
+              rounded
+              bg-gray-200
+              inline-block
+              px-4
+              py-1
+              text-base
+              dark:bg-gray-800
+              dark:text-gray-400
+              mb-8
+            "
+          >
+            🍺 Time to Chill!
+          </p>
+          <h1
+            v-if="state.selected"
+            class="text-2xl tracking-tight mb-4 font-semibold text-pink-700"
+          >
+            {{ state.selected.title ? state.selected.title : "" }}
+            <template v-if="state.selected.isMovieSeries">
+              - Tập
+              <span>
+                {{
+                  state.selected.isMovieSeries
+                    ? state.selected.currentEpisode
+                    : ""
+                }}
+              </span>
+            </template>
+          </h1>
+          <common-player
+            :data="state.selected"
+            @on-play="show.playing = true"
+          />
+
+          <div
+            v-if="
+              state.selected && state.selected.isMovieSeries && state.episodes
+            "
+            id="list-episodes"
+            class="
+              mt-4
+              grid
+              gap-2
+              grid-cols-8
+              max-h-72
+              overflow-y-scroll
+              scrollbar scrollbar-thumb-pink-600
+              dark:scrollbar-track-gray-900
+              scrollbar-thumb-rounded scrollbar-track-rounded
+            "
+          >
+            <span
+              v-for="episode in state.episodes"
+              :key="episode.id"
+              class="
+                episode
+                border
+                transition
+                cursor-pointer
+                hover:bg-gray-200
+                dark:border-gray-800
+                dark:bg-gray-800
+                dark:hover:bg-gray-600
+                hover:transition
+                rounded
+                px-4
+                py-2
+              "
+              :class="{
+                'is-active bg-pink-800 hover:bg-pink-600 text-white dark:bg-pink-800 dark:hover:bg-pink-600':
+                  parseInt(episode.label) === state.selected.currentEpisode,
+              }"
+              @click.prevent="setEpisode(episode)"
+            >
+              Tập {{ episode.label }}
             </span>
-          </template>
-        </h1>
-        <common-player :data="state.selected" @on-play="show.playing = true" />
-      </div>
+          </div>
+        </div>
+      </elements-overlay>
 
       <div v-if="state.results" id="results" class="my-8">
         <p
@@ -208,23 +269,25 @@ export default defineComponent({
     const state = reactive<any>({
       form: {
         q: null,
-        smartSearch: true
+        smartSearch: true,
       },
       errors: null,
       results: null,
       selected: null,
-      hasResults: false
+      hasResults: false,
+      episodes: [],
+      episodeUrls: [],
     })
     const busy = reactive({
       searching: false,
-      loadingPlaylist: false
+      loadingPlayer: false,
     })
     const appRef = ref()
-    const { getMovies } = useSearch()
+    const { getMovies, findEpisodeById } = useSearch()
     const route = useRoute()
     const router = useRouter()
     const show = ref({
-      playing: false
+      playing: false,
     })
 
     /**
@@ -238,11 +301,21 @@ export default defineComponent({
       initMotion()
     })
 
+    const setEpisodeScrollPosition = () => {
+      const $currentEpisode =
+        document.querySelector<HTMLElement>(".episode.is-active")
+      const $episodes = document.getElementById("list-episodes")
+
+      if ($currentEpisode !== null && $currentEpisode.offsetTop && $episodes) {
+        $episodes.scrollTop = $currentEpisode.offsetTop
+      }
+    }
+
     const initMotion = () => {
       useMotion(appRef, {
         initial: {
           x: 100,
-          opacity: 0
+          opacity: 0,
         },
         enter: {
           x: 0,
@@ -251,20 +324,20 @@ export default defineComponent({
             type: "spring",
             stiffness: 350,
             damping: 20,
-            delay: 50
-          }
-        }
+            delay: 50,
+          },
+        },
       })
     }
 
     const setQuery = (key: string, val: any) => {
       const query = {
-        [key]: val
+        [key]: val,
       }
       router.push({
         query: {
-          ...query
-        }
+          ...query,
+        },
       })
     }
 
@@ -299,7 +372,11 @@ export default defineComponent({
       } catch (err) {
         busy.searching = false
         state.results = null
-        state.errors = err.message
+        if (err.response.status === 503) {
+          state.errors = "Chờ chút rồi thử lại ha, đang quá tải"
+        } else {
+          state.errors = err.message
+        }
       }
     }
 
@@ -308,7 +385,20 @@ export default defineComponent({
      */
     const setSelectedMovie = (movie: any) => {
       if (movie) {
+        console.log("ok3")
         state.selected = movie
+        state.episodes = movie.meta.movieSeries.episodes
+      }
+    }
+
+    const setEpisode = async (episode: any) => {
+      if (episode) {
+        busy.loadingPlayer = true
+        const response = await findEpisodeById(episode.id)
+        state.selected.currentEpisode = parseInt(episode.label)
+        state.selected.url = response.data.url
+        state.selected = { ...state.selected }
+        busy.loadingPlayer = false
       }
     }
 
@@ -318,9 +408,10 @@ export default defineComponent({
       busy,
       search,
       setSelectedMovie,
-      appRef
+      appRef,
+      setEpisode,
     }
-  }
+  },
 })
 </script>
 
