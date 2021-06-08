@@ -22,7 +22,7 @@
         Phim
         <span class="text-gray-400">Phake</span>
       </h1>
-      <p class="mt-2 text-gray-400 font-extralight text-xl">
+      <p class="mt-2 text-gray-400 font-extralight md:text-xl">
         The free "<span class="font-normal">forever</span>" movie search engine
       </p>
 
@@ -69,7 +69,7 @@
           <div
             class="relative"
             :class="{
-              'w-1/2 mx-auto': state.hasResults,
+              'md:w-1/2 mx-auto': state.hasResults,
             }"
           >
             <input
@@ -82,7 +82,7 @@
                 'ring-red-600 ring-2 border-transparent':
                   state.errors &&
                   (state.form.q === null || state.form.q === ''),
-                'text-left': state.hasResults,
+                'md:text-left': state.hasResults,
               }"
               :disabled="busy.searching"
               @keyup.enter="search"
@@ -116,9 +116,7 @@
                     transform
                     transition
                     cursor-pointer
-                    hover:text-pink-500
-                    hover:stroke-2
-                    hover:transition
+                    hover:text-pink-500 hover:stroke-2 hover:transition
                     -translate-y-1/2
                   "
                 />
@@ -140,8 +138,7 @@
               px-4
               py-1
               text-base
-              dark:bg-gray-800
-              dark:text-gray-400
+              dark:bg-gray-800 dark:text-gray-400
               mb-8
             "
           >
@@ -149,7 +146,14 @@
           </p>
           <h1
             v-if="state.selected"
-            class="text-2xl tracking-tight mb-4 font-semibold text-pink-700"
+            class="
+              text-base
+              md:text-2xl
+              tracking-tight
+              mb-4
+              font-semibold
+              text-pink-700
+            "
           >
             {{ state.selected.title ? state.selected.title : "" }}
             <template v-if="state.selected.isMovieSeries">
@@ -177,8 +181,9 @@
               mt-4
               grid
               gap-2
-              grid-cols-8
-              max-h-72
+              max-h-36
+              grid-cols-3
+              md:grid-cols-8 md:max-h-72
               overflow-y-scroll
               scrollbar scrollbar-thumb-pink-600
               dark:scrollbar-track-gray-900
@@ -194,9 +199,7 @@
                 transition
                 cursor-pointer
                 hover:bg-gray-200
-                dark:border-gray-800
-                dark:bg-gray-800
-                dark:hover:bg-gray-600
+                dark:border-gray-800 dark:bg-gray-800 dark:hover:bg-gray-600
                 hover:transition
                 rounded
                 px-4
@@ -383,11 +386,11 @@ export default defineComponent({
     /**
      * Set selectec movie func
      */
-    const setSelectedMovie = (movie: any) => {
+    const setSelectedMovie = async (movie: any) => {
       if (movie) {
-        console.log("ok3")
-        state.selected = movie
-        state.episodes = movie.meta.movieSeries.episodes
+        const response = await findEpisodeById(movie.episodeId)
+        state.selected = { ...movie, url: response.data.url }
+        state.episodes = movie.episodeList
       }
     }
 
