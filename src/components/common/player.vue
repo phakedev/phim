@@ -16,7 +16,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, watch } from "vue"
 import videojs, { VideoJsPlayerOptions } from "video.js"
-import { hotkeys } from "./../../videojs"
+import { hotkeys, autoNext } from "./../../videojs"
 import "video.js/dist/video-js.css"
 import "./../../assets/css/videojs.css"
 
@@ -39,7 +39,13 @@ export default defineComponent({
     onMounted(() => {
       if (videojs.getAllPlayers().length === 0) {
         player = videojs("player", options)
-        videojs.registerPlugin("hotkeys", hotkeys.HotkeysPlugin)
+        videojs.registerPlugin("hotkeys", hotkeys.RegisterPlugin)
+        videojs.registerPlugin("autoNext", autoNext.RegisterPlugin)
+        player.autoNext({
+          handle() {
+            emit("on-next")
+          },
+        })
         player.hotkeys({
           volumeStep: 0.1,
           seekStep: 5,

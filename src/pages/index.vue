@@ -170,6 +170,7 @@
           <common-player
             :data="state.selected"
             @on-play="show.playing = true"
+            @on-next="nextEpisode"
           />
 
           <div
@@ -207,7 +208,7 @@
               "
               :class="{
                 'is-active bg-pink-800 hover:bg-pink-600 text-white dark:bg-pink-800 dark:hover:bg-pink-600':
-                  parseInt(episode.label) === state.selected.currentEpisode,
+                  parseInt(episode.id) === state.selected.currentEpisodeId,
               }"
               @click.prevent="setEpisode(episode)"
             >
@@ -381,7 +382,11 @@ export default defineComponent({
     const setSelectedMovie = async (movie: any) => {
       if (movie) {
         const response = await findEpisodeById(movie.episodeId)
-        state.selected = { ...movie, url: response.data.url }
+        state.selected = {
+          ...movie,
+          url: response.data.url,
+          currentEpisodeId: movie.episodeId,
+        }
         state.episodes = movie.episodeList
       }
     }
@@ -391,9 +396,22 @@ export default defineComponent({
         busy.loadingPlayer = true
         const response = await findEpisodeById(episode.id)
         state.selected.currentEpisode = parseInt(episode.label)
+        state.selected.currentEpisodeId = parseInt(episode.id)
         state.selected.url = response.data.url
         state.selected = { ...state.selected }
         busy.loadingPlayer = false
+      }
+    }
+
+    const nextEpisode = async () => {
+      if (state.selected) {
+        const currentEpisodeIndex = state.episodes.findIndex(
+          (episode: any) => episode.id == state.selected.currentEpisodeId
+        )
+
+        if (currentEpisodeIndex !== -1) {
+          await setEpisode(state.episodes[currentEpisodeIndex + 1])
+        }
       }
     }
 
@@ -405,6 +423,7 @@ export default defineComponent({
       setSelectedMovie,
       appRef,
       setEpisode,
+      nextEpisode,
     }
   },
 })

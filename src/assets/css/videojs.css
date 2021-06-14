@@ -1,10 +1,18 @@
 .vjs-theme-phake {
-  @apply font-mono;
+  @apply font-mono text-opacity-80 text-white;
+}
+
+.vjs-theme-phake .vjs-time-control {
+  @apply leading-none text-xs font-medium;
+}
+
+.vjs-theme-phake .vjs-remaining-time {
+  @apply flex items-center justify-center;
 }
 
 .vjs-theme-phake .vjs-control-bar {
-  @apply bg-gray-800 rounded mx-auto mb-1 bg-opacity-70;
-  width: 99%;
+  @apply bg-gray-800 rounded mx-auto mb-1.5 bg-opacity-70;
+  width: 98.5%;
 }
 
 .vjs-theme-phake .vjs-slider {

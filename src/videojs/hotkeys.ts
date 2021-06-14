@@ -1,8 +1,7 @@
 import videojs from "video.js"
-
 const Plugin = videojs.getPlugin("plugin")
 
-export class HotkeysPlugin extends Plugin {
+export class RegisterPlugin extends Plugin {
   private options: any
 
   private volumeStep
