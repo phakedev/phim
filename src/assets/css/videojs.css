@@ -1,0 +1,25 @@
+.vjs-theme-phake {
+  @apply font-mono;
+}
+
+.vjs-theme-phake .vjs-control-bar {
+  @apply bg-gray-800 rounded mx-auto mb-1 bg-opacity-70;
+  width: 99%;
+}
+
+.vjs-theme-phake .vjs-slider {
+  @apply bg-gray-100 bg-opacity-20 rounded;
+}
+
+.vjs-theme-phake .vjs-load-progress {
+  @apply rounded;
+}
+
+.vjs-theme-phake .vjs-load-progress div {
+  @apply bg-gray-100 bg-opacity-40;
+}
+
+.vjs-theme-phake .vjs-playback-rate > .vjs-menu-button,
+.vjs-theme-phake .vjs-playback-rate .vjs-playback-rate-value {
+  @apply text-xs flex items-center justify-center;
+}

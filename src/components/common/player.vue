@@ -3,7 +3,7 @@
     id="player"
     class="
       video-js
-      vjs-default-skin
+      vjs-theme-phake
       w-full
       md:min-h-20
       rounded
@@ -18,6 +18,7 @@ import { defineComponent, onMounted, watch } from "vue"
 import videojs, { VideoJsPlayerOptions } from "video.js"
 import { hotkeys } from "./../../videojs"
 import "video.js/dist/video-js.css"
+import "./../../assets/css/videojs.css"
 
 export default defineComponent({
   props: {
