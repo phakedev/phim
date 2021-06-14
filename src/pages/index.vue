@@ -304,16 +304,6 @@ export default defineComponent({
       initMotion()
     })
 
-    const setEpisodeScrollPosition = () => {
-      const $currentEpisode =
-        document.querySelector<HTMLElement>(".episode.is-active")
-      const $episodes = document.getElementById("list-episodes")
-
-      if ($currentEpisode !== null && $currentEpisode.offsetTop && $episodes) {
-        $episodes.scrollTop = $currentEpisode.offsetTop
-      }
-    }
-
     const initMotion = () => {
       useMotion(appRef, {
         initial: {
@@ -337,8 +327,10 @@ export default defineComponent({
       const query = {
         [key]: val,
       }
+      const currentQuery = route.query
       router.push({
         query: {
+          ...currentQuery,
           ...query,
         },
       })
