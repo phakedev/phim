@@ -11,24 +11,25 @@ import vueSvgPlugin from "vite-plugin-vue-svg"
 export default defineConfig({
   resolve: {
     alias: {
-      "~": resolve(__dirname, "src")
-    }
+      "~": resolve(__dirname, "src"),
+    },
   },
 
   plugins: [
     vue(),
     vueSvgPlugin({
       defaultExport: "url",
-      svgoConfig: {}
+      svgoConfig: {},
     }),
     ViteRadar({
+      enableDev: true,
       analytics: {
-        id: "G-RSNZK9JHE2"
-      }
+        id: "G-RSNZK9JHE2",
+      },
     }),
     WindiCSS(),
     ViteComponents({
-      customComponentResolvers: ViteIconsResolver()
+      customComponentResolvers: ViteIconsResolver(),
     }),
     ViteIcons(),
     ViteFonts({
@@ -37,15 +38,15 @@ export default defineConfig({
           {
             name: "JetBrains Mono",
             styles: "wght@300;400;500;600;700;800",
-            defer: true
-          }
+            defer: true,
+          },
         ],
-        display: "swap"
-      }
-    })
+        display: "swap",
+      },
+    }),
   ],
 
   build: {
-    chunkSizeWarningLimit: 600
-  }
+    chunkSizeWarningLimit: 600,
+  },
 })

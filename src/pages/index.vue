@@ -265,6 +265,7 @@ import { defineComponent, reactive, onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useSearch } from "~/modules/search"
 import { useMotion } from "@vueuse/motion"
+import { useTracking } from "~/modules/tracking"
 
 export default defineComponent({
   components: { ElementsOverlay, CommonMovie, CommonPlayer },
@@ -290,6 +291,7 @@ export default defineComponent({
     const { getMovies, findEpisodeById } = useSearch()
     const route = useRoute()
     const router = useRouter()
+    const { send } = useTracking()
     const show = ref({
       playing: false,
     })
@@ -347,6 +349,7 @@ export default defineComponent({
         }
 
         setQuery("q", state.form.q)
+        send("search", state.form.q)
 
         busy.searching = true
 
@@ -381,6 +384,10 @@ export default defineComponent({
      */
     const setSelectedMovie = async (movie: any) => {
       if (movie) {
+        send("select_content", {
+          type: "movie",
+          id: movie.episodeId,
+        })
         const response = await findEpisodeById(movie.episodeId)
         state.selected = {
           ...movie,
@@ -393,6 +400,10 @@ export default defineComponent({
 
     const setEpisode = async (episode: any) => {
       if (episode) {
+        send("select_content", {
+          type: "episode",
+          id: episode.id,
+        })
         busy.loadingPlayer = true
         const response = await findEpisodeById(episode.id)
         state.selected.currentEpisode = parseInt(episode.label)
@@ -410,6 +421,10 @@ export default defineComponent({
         )
 
         if (currentEpisodeIndex !== -1) {
+          send("select_content", {
+            type: "next_episode",
+            id: state.episodes[currentEpisodeIndex + 1].id,
+          })
           await setEpisode(state.episodes[currentEpisodeIndex + 1])
         }
       }

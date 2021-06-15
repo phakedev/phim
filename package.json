@@ -34,7 +34,7 @@
     "vite-plugin-icons": "^0.6.2",
     "vite-plugin-radar": "^0.2.0",
     "vite-plugin-vue-svg": "^0.1.0",
-    "vite-plugin-windicss": "^1.0.3",
+    "vite-plugin-windicss": "^1.0.4",
     "vue-tsc": "^0.1.7",
     "windicss": "^3.1.3"
   }
