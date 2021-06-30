@@ -266,9 +266,14 @@ import { useRoute, useRouter } from "vue-router"
 import { useSearch } from "~/modules/search"
 import { useMotion } from "@vueuse/motion"
 import { useTracking } from "~/modules/tracking"
+import { MotionDirective } from "@vueuse/motion"
 
 export default defineComponent({
   components: { ElementsOverlay, CommonMovie, CommonPlayer },
+
+  directives: {
+    motion: MotionDirective(),
+  },
 
   setup() {
     const state = reactive<any>({
