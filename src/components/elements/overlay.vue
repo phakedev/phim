@@ -46,8 +46,7 @@
           font-light font-mono
           text-gray-700
           transition
-          dark:transition
-          dark:text-gray-300
+          dark:transition dark:text-gray-300
         "
       >
         Đang "<span class="font-bold">mượn</span>" link...

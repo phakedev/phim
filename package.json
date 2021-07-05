@@ -9,33 +9,33 @@
     "build": "vue-tsc --noEmit && vite build"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^1.17.0",
+    "@supabase/supabase-js": "^1.18.0",
     "@vueuse/core": "^4.11.2",
     "@vueuse/integrations": "^4.11.2",
     "@vueuse/motion": "^1.5.6",
     "axios": "^0.21.1",
     "video.js": "^7.13.3",
-    "vue": "^3.1.2",
+    "vue": "^3.1.4",
     "vue-router": "^4.0.10"
   },
   "devDependencies": {
-    "@iconify/json": "^1.1.365",
-    "@types/video.js": "^7.3.22",
+    "@iconify/json": "^1.1.370",
+    "@types/video.js": "^7.3.23",
     "@vitejs/plugin-vue": "^1.2.4",
     "@vue/cli-plugin-eslint": "^4.5.13",
-    "@vue/compiler-sfc": "^3.1.2",
+    "@vue/compiler-sfc": "^3.1.4",
     "@windicss/plugin-scrollbar": "^1.2.3",
-    "eslint": "^7.29.0",
+    "eslint": "^7.30.0",
     "prettier": "^2.3.2",
-    "typescript": "^4.3.4",
+    "typescript": "^4.3.5",
     "vite": "^2.3.8",
     "vite-plugin-components": "^0.10.4",
     "vite-plugin-fonts": "^0.2.2",
-    "vite-plugin-icons": "^0.6.3",
+    "vite-plugin-icons": "^0.6.4",
     "vite-plugin-radar": "^0.2.0",
     "vite-plugin-vue-svg": "^0.1.0",
-    "vite-plugin-windicss": "^1.1.1",
+    "vite-plugin-windicss": "^1.2.0",
     "vue-tsc": "^0.1.7",
-    "windicss": "^3.1.3"
+    "windicss": "^3.1.4"
   }
 }

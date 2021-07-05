@@ -22,41 +22,39 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref } from "vue";
-import { useDark, useToggle } from "@vueuse/core";
-import IconMoon from "./../assets/svg/icon-moon.svg?component";
-import IconSun from "./../assets/svg/icon-sun.svg?component";
+import { defineComponent, onBeforeMount, ref } from "vue"
+import { useDark, useToggle } from "@vueuse/core"
+import IconMoon from "./../assets/svg/icon-moon.svg?component"
+import IconSun from "./../assets/svg/icon-sun.svg?component"
 
 export default defineComponent({
   components: { IconMoon, IconSun },
 
   setup() {
-    const showColorPreference = ref<boolean>(false);
-    const isDark = useDark();
-    const toggleDark = useToggle(isDark);
+    const showColorPreference = ref<boolean>(false)
+    const isDark = useDark()
+    const toggleDark = useToggle(isDark)
 
     onBeforeMount((): void => {
-      document.addEventListener("scroll", colorPreference);
-    });
+      document.addEventListener("scroll", colorPreference)
+    })
 
     // Show colorPreference
     const colorPreference = (): void => {
-      const scrollY = window.scrollY || window.pageYOffset;
-      const $element = document.querySelector("#logo");
+      const scrollY = window.scrollY || window.pageYOffset
+      const $element = document.querySelector("#logo")
       if ($element) {
         const elementPosition =
-          $element.getBoundingClientRect().top +
-          scrollY +
-          $element.clientHeight;
+          $element.getBoundingClientRect().top + scrollY + $element.clientHeight
         if (scrollY > elementPosition - 50) {
-          showColorPreference.value = true;
+          showColorPreference.value = true
         } else {
-          showColorPreference.value = false;
+          showColorPreference.value = false
         }
       }
-    };
+    }
 
-    return { isDark, showColorPreference, toggleDark };
+    return { isDark, showColorPreference, toggleDark }
   },
-});
+})
 </script>

@@ -2,11 +2,9 @@
   <div
     v-if="data"
     class="
-      relative 
+      relative
       transition
-      hover:transform
-      hover:transition
-      hover:scale-105
+      hover:transform hover:transition hover:scale-105
       cursor-pointer
     "
     @click="$emit('on-play', data)"
@@ -57,8 +55,7 @@
         cursor-pointer
         transition
         dark:text-gray-200
-        hover:text-pink-600
-        hover:transition
+        hover:text-pink-600 hover:transition
       "
       @click.prevent="$emit('on-play', data)"
     >
@@ -73,13 +70,13 @@ export default defineComponent({
   props: {
     data: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   emits: ["on-play"],
   setup() {
     return {}
-  }
+  },
 })
 </script>
 
