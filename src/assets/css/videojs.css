@@ -31,3 +31,20 @@
 .vjs-theme-phake .vjs-playback-rate .vjs-playback-rate-value {
   @apply text-xs flex items-center justify-center;
 }
+
+.vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+  @apply bg-gray-800 bg-opacity-60 rounded-t;
+}
+
+.vjs-menu li.vjs-menu-item:focus,
+.vjs-menu li.vjs-menu-item:hover,
+.js-focus-visible .vjs-menu li.vjs-menu-item:hover {
+  @apply bg-gray-800 bg-opacity-30;
+}
+
+.vjs-menu li.vjs-selected,
+.vjs-menu li.vjs-selected:focus,
+.vjs-menu li.vjs-selected:hover,
+.js-focus-visible .vjs-menu li.vjs-selected:hover {
+  @apply text-gray-600 bg-white;
+}

@@ -184,7 +184,7 @@
               gap-2
               max-h-36
               grid-cols-3
-              md:grid-cols-8 md:max-h-72
+              md:grid-cols-7 md:max-h-72
               overflow-y-scroll
               scrollbar scrollbar-thumb-pink-600
               dark:scrollbar-track-gray-900
@@ -203,8 +203,9 @@
                 dark:border-gray-800 dark:bg-gray-800 dark:hover:bg-gray-600
                 hover:transition
                 rounded
-                px-4
+                px-2
                 py-2
+                text-sm
               "
               :class="{
                 'is-active bg-pink-800 hover:bg-pink-600 text-white dark:bg-pink-800 dark:hover:bg-pink-600':
