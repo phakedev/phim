@@ -1,5 +1,22 @@
 .vjs-theme-phake {
-  @apply font-mono text-opacity-80 text-white;
+  @apply font-mono text-opacity-80 text-white bg-black rounded;
+}
+
+.vjs-theme-phake .vjs-text-track-display {
+  @apply bottom-10;
+}
+
+.vjs-theme-phake .vjs-loading-spinner:before {
+  border-top-color: theme("colors.gray.700") !important;
+}
+
+.vjs-theme-phake .vjs-loading-spinner:after {
+  border-top-color: theme("colors.gray.500") !important;
+}
+
+.vjs-theme-phake .vjs-loading-spinner {
+  border: unset;
+  @apply border-6 border-solid border-gray-900 border-opacity-70;
 }
 
 .vjs-theme-phake .vjs-time-control {
